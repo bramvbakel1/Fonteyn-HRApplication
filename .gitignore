@@ -1,0 +1,8 @@
+# .gitignore
+
+#ignores the certificates
+/certs/server.key
+
+#ignores the executable file
+.exe
+

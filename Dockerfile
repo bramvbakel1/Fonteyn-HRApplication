@@ -1,28 +1,18 @@
-# Use official Golang image as a base
-FROM golang:1.20 AS builder
-
-# Set the Current Working Directory inside the container
+FROM golang:1.23.0 as builder
 WORKDIR /app
 
-# Copy everything from the current directory to the container
-COPY . .
-
-# Download all the dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
-RUN go mod tidy
-
-# Build the Go app
+COPY go.mod ./
+RUN go mod download
+COPY . ./
 RUN go build -o main .
 
-# Start a new stage from scratch to create a smaller image
-FROM alpine:latest  
+FROM debian:bookworm-slim
+WORKDIR /app
 
-WORKDIR /root/
-
-# Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/main .
+COPY --from=builder /app/certs ./certs
+COPY --from=builder /app/templates ./templates
 
-# Expose the port the app runs on
-EXPOSE 8080
+EXPOSE 443
 
-# Command to run the executable
 CMD ["./main"]

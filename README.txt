@@ -1,0 +1,2 @@
+This is a web application built with Go that allows administrators to manage users in Microsoft Entra ID (Azure Active Directory) using the Microsoft Graph API.
+The application supports operations such as creating, updating, and deleting users.
